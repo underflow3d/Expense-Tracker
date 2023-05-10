@@ -40,7 +40,7 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
       body: Column(
         children: [
-          Text("The Chart"),
+          const Text("The Chart"),
           Expanded(child: ExpensesList(expenses: _registeredExpenses))
         ],
       ),
