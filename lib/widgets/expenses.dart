@@ -35,6 +35,10 @@ class _ExpensesState extends State<Expenses> {
         category: Category.travel),
   ];
 
+  void _openAddExpenseOverlay() {
+    // Code
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,10 +46,7 @@ class _ExpensesState extends State<Expenses> {
         title: const Text("Expense Tracker"),
         actions: [
           IconButton(
-              onPressed: () {
-                // Code
-              },
-              icon: const Icon(Icons.add))
+              onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
         ],
       ),
       body: Column(
