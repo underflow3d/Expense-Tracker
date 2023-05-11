@@ -36,7 +36,11 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay() {
-    // Code
+    showModalBottomSheet(
+        context: context,
+        builder: (ctx) {
+          return Text("Bottom Modal Sheet!");
+        });
   }
 
   @override
