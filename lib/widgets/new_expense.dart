@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+final formatter = DateFormat.yMd();
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -12,12 +15,27 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
 
   @override
   void dispose() {
     _titleController.dispose();
     _amountController.dispose();
     super.dispose();
+  }
+
+  void _presentDatePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final lastDate = DateTime(now.year + 1, now.month, now.day);
+    final datePicked = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: lastDate);
+    setState(() {
+      _selectedDate = datePicked;
+    });
   }
 
   @override
@@ -51,9 +69,12 @@ class _NewExpenseState extends State<NewExpense> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text("Select Date"),
+                    Text((_selectedDate == null)
+                        ? "No Date Selected"
+                        : formatter.format(_selectedDate!)),
                     IconButton(
-                        onPressed: () {}, icon: Icon(Icons.calendar_month))
+                        onPressed: _presentDatePicker,
+                        icon: const Icon(Icons.calendar_month))
                   ],
                 ),
               )
@@ -67,7 +88,7 @@ class _NewExpenseState extends State<NewExpense> {
                     Navigator.pop(context);
                   },
                   child: const Text("Cancel")),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     print(_titleController.text);
                     print(_amountController.text);
