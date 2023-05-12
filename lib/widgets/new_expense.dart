@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-final formatter = DateFormat.yMd();
+import 'package:expense_tracker/model/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() {
@@ -15,6 +15,7 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  var _selectedCategory = Category.leisure;
   DateTime? _selectedDate;
 
   @override
@@ -36,6 +37,38 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = datePicked;
     });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount < 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              title: const Text("Invalid Input"),
+              content: const Text("Please Enter A Valid Input"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text("Okay")),
+              ],
+            );
+          });
+      return;
+    }
+    widget.onAddExpense(Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory));
+    Navigator.pop(context);
+    return;
   }
 
   @override
@@ -71,7 +104,7 @@ class _NewExpenseState extends State<NewExpense> {
                   children: [
                     Text((_selectedDate == null)
                         ? "No Date Selected"
-                        : formatter.format(_selectedDate!)),
+                        : dateFormatter.format(_selectedDate!)),
                     IconButton(
                         onPressed: _presentDatePicker,
                         icon: const Icon(Icons.calendar_month))
@@ -82,6 +115,22 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
+              DropdownButton(
+                  value: _selectedCategory,
+                  items: Category.values.map((val) {
+                    return DropdownMenuItem(
+                        value: val, child: Text(val.name.toUpperCase()));
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    } else {
+                      return;
+                    }
+                  }),
+              const Spacer(),
               TextButton(
                   onPressed: () {
                     // Cancel
@@ -89,10 +138,7 @@ class _NewExpenseState extends State<NewExpense> {
                   },
                   child: const Text("Cancel")),
               TextButton(
-                  onPressed: () {
-                    print(_titleController.text);
-                    print(_amountController.text);
-                  },
+                  onPressed: _submitExpenseData,
                   child: const Text("Save Expense"))
             ],
           )
