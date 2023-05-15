@@ -36,6 +36,9 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Expense Deleted!"),
+    ));
   }
 
   void _openAddExpenseOverlay() {
