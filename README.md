@@ -1,16 +1,7 @@
-# expense_tracker
+# Expense Tracker
 
-A new Flutter project.
+A Simple App TO Track All Your Expenses!!
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This Expense Tracker is Made Using Flutter Meaning That You Can Run It On Any Platform!! Setup and Run This Flutter App and Enjoy By Tracking Your Expenses!!.
